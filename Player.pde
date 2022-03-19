@@ -14,7 +14,7 @@ class Player {
     left = false;
     shoot = false;
     
-    score = 1000000;
+    score = 0;
     lives = 3;
     recovering = false;
     recoverTime = 0;

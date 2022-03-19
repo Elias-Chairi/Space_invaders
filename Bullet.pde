@@ -5,10 +5,10 @@ class Bullet {
     h = 10;
     x = xPos - w/2;
     y = yPos;
-    if (y < height-100) { // gå ned hvis oppe
-      speed = 10;
-    } else { // gå opp hvis nede
-      speed = -50;
+    if (y < height-100) { // speed if going down
+      speed = 8;
+    } else { // speed if going up
+      speed = -10;
     }
   }
   

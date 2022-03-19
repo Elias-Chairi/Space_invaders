@@ -20,7 +20,7 @@ class Invader {
     if (y < moveToY) {
       y += abs(speed);
       if (y >= height -200) {
-        p1.lives = 0;
+        original.p1.lives = 0;
       }
     }
   }

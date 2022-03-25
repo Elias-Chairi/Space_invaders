@@ -5,12 +5,14 @@ class Invader {
   int value = 30;
   Bullet currentBullet;
   boolean dead = false;
-  Invader (int xPos, int yPos, int iWidth, int iHeight) {
+  Player p1;
+  Invader (int xPos, int yPos, int iWidth, int iHeight, Player player) {
     x = xPos;
     y = yPos;
     w = iWidth;
     h = iHeight;
     
+    p1 = player;
     moveToY = yPos;
   }
   
@@ -20,7 +22,7 @@ class Invader {
     if (y < moveToY) {
       y += abs(speed);
       if (y >= height -200) {
-        //gameList.get(0).p1.lives = 0;
+        p1.lives = 0;
       }
     }
   }

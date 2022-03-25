@@ -25,89 +25,90 @@ class OriginalGameMode implements gameMode {
     }
     for (int i = 0; i < difficultylevel; i++) { // ++ verticaly
       for (int j = 0; j < 10; j++) { // + 10 Invaders hoizontaly
-        invaders = (Invader[])append(invaders, new Invader(j * 30 + 5, i * 30 + 30, 20, 20)); // xPos, yPos, width, height
+        invaders = (Invader[])append(invaders, new Invader(j * 30 + 5, i * 30 + 30, 20, 20, p1)); // xPos, yPos, width, height
       }
     }
     leftRightInvaderIndex = checkLeftRightInvader(invaders); // check the left and right invader after wavesetup
   }
   
   void gameDraw() {
-    background(0);
-    stroke(100, 0, 0);
-    line(0, height -200, width, height-200);
-    
-    p1.updatePosition();
-    p1.updateBullet();
-    p1.show();
-    
-    for (int i = 0; i < invaders.length; i++) {
-      invaders[i].update();
-      invaders[i].shoot();
-      invaders[i].show();
-    }
-    
-    for (int i = 0; i < invaders.length; i++) {
-      if (invaders[i].dead && invaders[i].currentBullet == null) {
-        invaders = removeEelement(invaders, i); // removes the invader when dead and the bullet is out of play
-        leftRightInvaderIndex = checkLeftRightInvader(invaders); // check the left and right invader after a invader has died
-      }
-    }
-    
-    
-    updateBullets();
-    
-    // invader movement
-    if (invaders.length > 0) {
+    if (p1.lives > 0) { // player alive?
+      background(0);
+      stroke(100, 0, 0);
+      line(0, height -200, width, height-200);
       
-      if (invaders[leftRightInvaderIndex[1]].x + invaders[leftRightInvaderIndex[1]].w > width -5 || // right wall
-          invaders[leftRightInvaderIndex[0]].x < 5) { // left wall
-        for (int i = 0; i < invaders.length; i++) {
-          invaders[i].speed *= -1;
-        }
-        hitWallCounter ++;
+      p1.updatePosition();
+      p1.updateBullet();
+      p1.show();
+      
+      for (int i = 0; i < invaders.length; i++) {
+        invaders[i].update();
+        invaders[i].shoot();
+        invaders[i].show();
       }
-      if (hitWallCounter % 4 == 0) {
-        for (int i = 0; i < invaders.length; i++) {
-          invaders[i].moveDown();
+      
+      updateBullets();
+      
+      for (int i = 0; i < invaders.length; i++) {
+        if (invaders[i].dead && invaders[i].currentBullet == null) {
+          invaders = removeEelement(invaders, i); // removes the invader when dead and the bullet is out of play
+          leftRightInvaderIndex = checkLeftRightInvader(invaders); // check the left and right invader after a invader has died
         }
-        hitWallCounter ++; //stop making this true
       }
+      
+      
+      // invader movement
+      if (invaders.length > 0) {
+        
+        if (invaders[leftRightInvaderIndex[1]].x + invaders[leftRightInvaderIndex[1]].w > width -5 || // right wall
+            invaders[leftRightInvaderIndex[0]].x < 5) { // left wall
+          for (int i = 0; i < invaders.length; i++) {
+            invaders[i].speed *= -1;
+          }
+          hitWallCounter ++;
+        }
+        if (hitWallCounter % 4 == 0) {
+          for (int i = 0; i < invaders.length; i++) {
+            invaders[i].moveDown();
+          }
+          hitWallCounter ++; //stop making this true
+        }
+      }
+      
+      // round over (no invaders) starting timer, starting new round
+      else {
+        breakTimer++;
+      }
+      fill(255);
+      textSize(100);
+      if (breakTimer > 120) {
+        text(1, width/2 - 30, height/2);
+      } else if (breakTimer > 60) {
+        text(2, width/2 - 30, height/2);
+      } else if (breakTimer > 1) {
+        text(3, width/2 - 30, height/2);
+      }
+      if (breakTimer > 180) {
+        breakTimer = 1;
+        waveSetup();
+      }
+      
+      fill(255);
+      textSize(20);
+      textAlign(BASELINE);
+      text("SCORE: " + p1.score, 10, 20);
+      text("LIVES: " + p1.lives, width - 100, 20);
     }
     
-    // round over (no invaders)
-    else {
-      breakTimer++;
-    }
-    fill(255);
-    textSize(100);
-    if (breakTimer > 120) {
-      text(1, width/2 - 30, height/2);
-    } else if (breakTimer > 60) {
-      text(2, width/2 - 30, height/2);
-    } else if (breakTimer > 1) {
-      text(3, width/2 - 30, height/2);
-    }
-    if (breakTimer > 180) {
-      breakTimer = 1;
-      waveSetup();
-    }
-    
-    
-    fill(255);
-    textSize(20);
-    textAlign(BASELINE);
-    text("SCORE: " + p1.score, 10, 20);
-    text("LIVES: " + p1.lives, width - 100, 20);
-   
-    if (p1.lives == 0) {
-        noLoop();
-        background(0);
-        fill(255, 0, 0);
-        textSize(80);
-        text("GAME OVER", 50, height/2);
-        fill(255);
-        textSize(30);
-        text("Final score: " + p1.score, 50, height/2 + 100);
+    else { // player dead (game over)
+      noLoop();
+      background(0);
+      fill(255, 0, 0);
+      textSize(80);
+      text("GAME OVER", 50, height/2);
+      fill(255);
+      textSize(30);
+      text("Final score: " + p1.score, 50, height/2 + 100);
     }
   }
   

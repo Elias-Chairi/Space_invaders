@@ -6,7 +6,7 @@ class Bullet {
     x = xPos - w/2;
     y = yPos;
     if (y < height-100) { // speed if going down
-      speed = 8;
+      speed = 10;
     } else { // speed if going up
       speed = -10;
     }

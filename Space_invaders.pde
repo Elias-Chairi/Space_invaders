@@ -1,55 +1,92 @@
-boolean paused = false;
+interface gameMode {
+  void gameSetup();
+  void gameDraw();
+  void gameKeyPressed();
+  void gameKeyReleased();
+}
 
-OriginalGameMode original = new OriginalGameMode();
-String gameMode = "original";
+boolean startMenu = true;
+boolean paused = false;
+ArrayList<gameMode> gameList = new ArrayList<gameMode>();
+int gameIndex = 0; // default
+Button[] buttons = new Button[0];
+
 
 void setup() {
   size(500, 500);
-  original.gameSetup();
+  gameList.add(new OriginalGameMode());
+  buttons = (Button[])append(buttons, new Button(width/2, height/4, "original"));
+  buttons = (Button[])append(buttons, new Button(width/2, height/4 * 2, "anotherOne"));
+  buttons = (Button[])append(buttons, new Button(width/2, height/4 * 3, "..."));
 }
 
 void draw() {
-  switch(gameMode) {
-    case "original": 
-      original.gamePlay();
-      break;
-    case "anotherOne": 
-      break;
-    case "menu":
-      break;
+  if (startMenu) {
+    background(0);
+    for (int i = 0; i < buttons.length; i++){
+      buttons[i].show();
+    }
+    
+  } else {
+    gameList.get(gameIndex).gameDraw();
   }
 }
 
-void keyPressed() {
+void mouseMoved() {
+  if (startMenu) {
+    for (int i = 0; i < buttons.length; i++){
+      if (mouseX > buttons[i].x && mouseX < buttons[i].x + buttons[i].w &&
+          mouseY > buttons[i].y && mouseY < buttons[i].y + buttons[i].h) {
+        buttons[i].hover = true;
+      } else {
+        buttons[i].hover = false;
+      }
+    } 
+  }
+}
+
+void mouseClicked() {
+  if (startMenu) {
+    for (int i = 0; i < buttons.length; i++){
+      if (mouseX > buttons[i].x && mouseX < buttons[i].x + buttons[i].w &&
+          mouseY > buttons[i].y && mouseY < buttons[i].y + buttons[i].h) {
+        chooseGameMode(buttons[i].text);
+      }
+    } 
+  }
+}
+
+void chooseGameMode(String gameMode) {
   switch(gameMode) {
     case "original": 
-      original.gameKeyPressed();
+      gameIndex = 0;
       break;
     case "anotherOne": 
-      break;
-    case "menu":
+      gameIndex = 0;
       break;
   }
-  
-  if (key == 'p') {
-    if (paused) {
-      loop();
-      paused = false;
-    } else {
-      noLoop();
-      paused = true;
+  startMenu = false;
+  gameList.get(gameIndex).gameSetup();
+}
+
+void keyPressed() {
+  if (!startMenu) {
+    gameList.get(gameIndex).gameKeyPressed(); // game input
+    
+    if (key == 'p') {
+      if (paused) {
+        loop();
+        paused = false;
+      } else {
+        noLoop();
+        paused = true;
+      }
     }
   }
 }
 
 void keyReleased() {
-  switch(gameMode) {
-    case "original": 
-      original.gameKeyReleased();
-      break;
-    case "anotherOne": 
-      break;
-    case "menu":
-      break;
+  if (!startMenu) {
+    gameList.get(gameIndex).gameKeyReleased(); // game input
   }
 }

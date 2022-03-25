@@ -1,7 +1,8 @@
-class OriginalGameMode {
-  // 2790 Sturla
-  // 3300, 3690 ole
-  // 1170 Markus
+class OriginalGameMode implements gameMode {
+  
+  // 2790, 2010, 3240 Sturla
+  // 3300, 3690, (5348, mindre speed), 3870, 3570, 4080 ole
+  // 1040, 1170, 1260, 1590, 2400 Marcus
   
   int difficultylevel = 0; // how many rows
   int[] leftRightInvaderIndex; // the invader that is the most to the left and the right
@@ -12,13 +13,16 @@ class OriginalGameMode {
   
   void gameSetup() {
     p1 = new Player(width/2, height - 50, 50, 20); // x, y, w, h
+    print("Starting the orginal game");
   }
   
   void waveSetup() {
     if (difficultylevel != 0) {
       p1.lives ++;
     }
-    difficultylevel++;
+    if (difficultylevel < 7){
+      difficultylevel++;
+    }
     for (int i = 0; i < difficultylevel; i++) { // ++ verticaly
       for (int j = 0; j < 10; j++) { // + 10 Invaders hoizontaly
         invaders = (Invader[])append(invaders, new Invader(j * 30 + 5, i * 30 + 30, 20, 20)); // xPos, yPos, width, height
@@ -27,7 +31,7 @@ class OriginalGameMode {
     leftRightInvaderIndex = checkLeftRightInvader(invaders); // check the left and right invader after wavesetup
   }
   
-  void gamePlay() {
+  void gameDraw() {
     background(0);
     stroke(100, 0, 0);
     line(0, height -200, width, height-200);
@@ -91,6 +95,7 @@ class OriginalGameMode {
     
     fill(255);
     textSize(20);
+    textAlign(BASELINE);
     text("SCORE: " + p1.score, 10, 20);
     text("LIVES: " + p1.lives, width - 100, 20);
    

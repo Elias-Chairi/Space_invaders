@@ -1,7 +1,5 @@
 class RainingInvaders implements gameMode {
   
-  int difficultylevel = 0; // how many rows
-  int[] leftRightInvaderIndex; // the invader that is the most to the left and the right
   boolean invadersSpawning = false;
   int breakTimer = 0; // 3-2-1 counter
   int enemySpwanTimer = 90;
@@ -38,7 +36,6 @@ class RainingInvaders implements gameMode {
       for (int i = 0; i < invaders.length; i++) {
         if (invaders[i].dead && invaders[i].currentBullet == null) {
           invaders = removeEelement(invaders, i); // removes the invader when dead and the bullet is out of play
-          leftRightInvaderIndex = checkLeftRightInvader(invaders); // check the left and right invader after a invader has died
         }
       }
       
@@ -143,27 +140,6 @@ class RainingInvaders implements gameMode {
       }
     }
     return newArray;
-  }
-  
-  int[] checkLeftRightInvader( Invader[] invaders) { // finding the invader that is the most to the left and the right
-    int maxX = 0;
-    int rightIndex = 0;
-    int minX = width;
-    int leftIndex = 0;
-    
-    for (int i = 0; i < invaders.length; i++) {
-      if (invaders[i].x < minX) {
-        minX = invaders[i].x;
-        leftIndex = i;
-      }
-      if (invaders[i].x > maxX) {
-        maxX = invaders[i].x;
-        rightIndex = i;
-      }
-    }
-    
-    int[] leftRight = {leftIndex, rightIndex};
-    return leftRight;
   }
   
   void gameKeyPressed() {

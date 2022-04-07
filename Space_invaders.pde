@@ -8,15 +8,16 @@ interface gameMode {
 boolean startMenu = true;
 boolean paused = false;
 ArrayList<gameMode> gameList = new ArrayList<gameMode>();
-int gameIndex = 0; // default
+int gameIndex = 100; // default
 Button[] buttons = new Button[0];
 
 
 void setup() {
   size(500, 500);
   gameList.add(new OriginalGameMode());
+  gameList.add(new RainingInvaders());
   buttons = (Button[])append(buttons, new Button(width/2, height/4, "original"));
-  buttons = (Button[])append(buttons, new Button(width/2, height/4 * 2, "anotherOne"));
+  buttons = (Button[])append(buttons, new Button(width/2, height/4 * 2, "Raining invaders"));
   buttons = (Button[])append(buttons, new Button(width/2, height/4 * 3, "..."));
 }
 
@@ -61,12 +62,14 @@ void chooseGameMode(String gameMode) {
     case "original": 
       gameIndex = 0;
       break;
-    case "anotherOne": 
-      gameIndex = 0;
+    case "Raining invaders": 
+      gameIndex = 1;
       break;
   }
-  startMenu = false;
-  gameList.get(gameIndex).gameSetup();
+  if (gameIndex != 100) { // chose a gamemode
+    startMenu = false;
+    gameList.get(gameIndex).gameSetup();
+  }
 }
 
 void keyPressed() {

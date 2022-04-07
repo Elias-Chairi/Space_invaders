@@ -3,7 +3,7 @@ class Button {
   String text;
   boolean hover = false;
   Button (int xPos, int yPos, String buttonText) {
-    w = 300;
+    w = 400;
     h = 60;
     x = xPos - w/2;
     y = yPos;

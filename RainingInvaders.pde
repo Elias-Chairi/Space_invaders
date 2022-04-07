@@ -1,34 +1,16 @@
-class OriginalGameMode implements gameMode {
-  
-  // 2790, 2010, 3240 Sturla
-  // 3300, 3690, (5348, mindre speed), 3870, 3570, 4080 ole
-  // 1040, 1170, 1260, 1590, 2400 Marcus
+class RainingInvaders implements gameMode {
   
   int difficultylevel = 0; // how many rows
   int[] leftRightInvaderIndex; // the invader that is the most to the left and the right
-  int hitWallCounter = 1;
+  boolean invadersSpawning = false;
   int breakTimer = 0; // 3-2-1 counter
+  int enemySpwanTimer = 90;
   Player p1;
   Invader[] invaders = new Invader[0];
   
   void gameSetup() {
     p1 = new Player(width/2, height - 50, 50, 20); // x, y, w, h
-    print("Starting the orginal game");
-  }
-  
-  void waveSetup() {
-    if (difficultylevel != 0) {
-      p1.lives ++;
-    }
-    if (difficultylevel < 7){
-      difficultylevel++;
-    }
-    for (int i = 0; i < difficultylevel; i++) { // ++ verticaly
-      for (int j = 0; j < 10; j++) { // + 10 Invaders hoizontaly
-        invaders = (Invader[])append(invaders, new Invader(j * 30 + 5, i * 30 + 30, 20, 20, p1, 1, false)); // xPos, yPos, width, height, ySpeed, randomDirection
-      }
-    }
-    leftRightInvaderIndex = checkLeftRightInvader(invaders); // check the left and right invader after wavesetup
+    print("Starting Raining invaders");
   }
   
   void gameDraw() {
@@ -40,6 +22,10 @@ class OriginalGameMode implements gameMode {
       p1.updatePosition();
       p1.updateBullet();
       p1.show();
+      
+      if (invadersSpawning) {
+        spawnInvaders();
+      }
       
       for (int i = 0; i < invaders.length; i++) {
         invaders[i].update();
@@ -59,20 +45,13 @@ class OriginalGameMode implements gameMode {
       
       // invader movement
       if (invaders.length > 0) {
-        
-        if (invaders[leftRightInvaderIndex[1]].x + invaders[leftRightInvaderIndex[1]].w > width -5 || // right wall
-            invaders[leftRightInvaderIndex[0]].x < 5) { // left wall
-          for (int i = 0; i < invaders.length; i++) {
+        for (int i = 0; i < invaders.length; i++) {
+          invaders[i].y += 0.5;
+          if (invaders[i].x >  width - invaders[i].w || invaders[i].x < 0){
             invaders[i].speed *= -1;
           }
-          hitWallCounter ++;
         }
-        if (hitWallCounter % 4 == 0) {
-          for (int i = 0; i < invaders.length; i++) {
-            invaders[i].moveDown();
-          }
-          hitWallCounter ++; //stop making this true
-        }
+
       }
       
       // round over (no invaders) starting timer, starting new round
@@ -90,7 +69,7 @@ class OriginalGameMode implements gameMode {
       }
       if (breakTimer > 180) {
         breakTimer = 1;
-        waveSetup();
+        invadersSpawning = true;
       }
       
       fill(255);
@@ -111,6 +90,16 @@ class OriginalGameMode implements gameMode {
       text("Final score: " + p1.score, 50, height/2 + 100);
     }
   }
+  
+  void spawnInvaders() {
+    if (enemySpwanTimer % 90 == 0) {
+      invaders = (Invader[])append(invaders, new Invader(int(random(width -20)), 0, 20, 20, p1, 0.05, true)); // xPos, yPos, width, height, ySpeed, randomDirection
+      invaders[invaders.length - 1].moveToY = height;
+    } 
+    enemySpwanTimer++;
+  }
+  
+  
   
   void updateBullets() {
     if (p1.currentBullet != null) { // if playerBullet exists, check for hit on invaders

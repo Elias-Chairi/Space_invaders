@@ -1,6 +1,6 @@
 class Player { 
   int x, y, w, h, moveSpeed, recoverTime;
-  boolean right, left, shoot, recovering;
+  boolean right, left, shoot, recovering, shootingEnabled;
   int score, lives;
   Bullet currentBullet;
   Player (int xPos, int yPos, int pWidth, int pheight) {  

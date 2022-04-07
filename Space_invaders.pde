@@ -16,9 +16,10 @@ void setup() {
   size(500, 500);
   gameList.add(new OriginalGameMode());
   gameList.add(new RainingInvaders());
+  gameList.add(new DodgeGame());
   buttons = (Button[])append(buttons, new Button(width/2, height/4, "original"));
   buttons = (Button[])append(buttons, new Button(width/2, height/4 * 2, "Raining invaders"));
-  buttons = (Button[])append(buttons, new Button(width/2, height/4 * 3, "..."));
+  buttons = (Button[])append(buttons, new Button(width/2, height/4 * 3, "Dodge Game"));
 }
 
 void draw() {
@@ -65,8 +66,11 @@ void chooseGameMode(String gameMode) {
     case "Raining invaders": 
       gameIndex = 1;
       break;
+    case "Dodge Game":
+      gameIndex = 2;
+      break;
   }
-  if (gameIndex != 100) { // chose a gamemode
+  if (gameIndex != 100) { // gameIndex not default
     startMenu = false;
     gameList.get(gameIndex).gameSetup();
   }

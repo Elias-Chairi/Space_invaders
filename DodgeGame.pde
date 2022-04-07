@@ -1,24 +1,28 @@
-class RainingInvaders implements gameMode {
+class DodgeGame implements gameMode {
   
   boolean invadersSpawning = false;
   int breakTimer = 0; // 3-2-1 counter
   int enemySpwanTimer = 90;
   Player p1;
   Invader[] invaders = new Invader[0];
+  int timeCounter = 0;
   
   void gameSetup() {
     p1 = new Player(width/2, height - 50, 50, 20); // x, y, w, h
-    print("Starting Raining invaders");
+    print("Starting Dodge Game");
   }
   
   void gameDraw() {
+    timeCounter++;
+    if (timeCounter % 30 == 0) {
+      p1.score += 5; // getting 5 point every half a second
+    }
+    
+    
     if (p1.lives > 0) { // player alive?
       background(0);
-      stroke(100, 0, 0);
-      line(0, height -200, width, height-200);
       
       p1.updatePosition();
-      p1.updateBullet();
       p1.show();
       
       if (invadersSpawning) {
@@ -43,6 +47,7 @@ class RainingInvaders implements gameMode {
       // invader movement
       if (invaders.length > 0) {
         for (int i = 0; i < invaders.length; i++) {
+          //invaders[i].y += 0.5;
           if (invaders[i].x >  width - invaders[i].w || invaders[i].x < 0){
             invaders[i].speed *= -1;
           }
@@ -89,7 +94,7 @@ class RainingInvaders implements gameMode {
   
   void spawnInvaders() {
     if (enemySpwanTimer % 90 == 0) {
-      invaders = (Invader[])append(invaders, new Invader(int(random(width -20)), 0, 20, 20, p1, 0.5, true)); // xPos, yPos, width, height, ySpeed, randomDirection
+      invaders = (Invader[])append(invaders, new Invader(int(random(width -20)), 50, 20, 20, p1, 0, true)); // xPos, yPos, width, height, ySpeed, randomDirection
       invaders[invaders.length - 1].moveToY = height;
     } 
     enemySpwanTimer++;

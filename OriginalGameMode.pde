@@ -25,7 +25,7 @@ class OriginalGameMode implements gameMode {
     }
     for (int i = 0; i < difficultylevel; i++) { // ++ verticaly
       for (int j = 0; j < 10; j++) { // + 10 Invaders hoizontaly
-        invaders = (Invader[])append(invaders, new Invader(j * 30 + 5, i * 30 + 30, 20, 20, p1, 1, false)); // xPos, yPos, width, height, ySpeed, randomDirection
+        invaders = (Invader[])append(invaders, new Invader(j * 30 + 5, i * 30 + 30, 20, 20, p1, 1, false)); // xPos, yPos, width, height, player, ySpeed, randomDirection
       }
     }
     leftRightInvaderIndex = checkLeftRightInvader(invaders); // check the left and right invader after wavesetup
@@ -63,7 +63,7 @@ class OriginalGameMode implements gameMode {
         if (invaders[leftRightInvaderIndex[1]].x + invaders[leftRightInvaderIndex[1]].w > width -5 || // right wall
             invaders[leftRightInvaderIndex[0]].x < 5) { // left wall
           for (int i = 0; i < invaders.length; i++) {
-            invaders[i].speed *= -1;
+            invaders[i].xSpeed *= -1;
           }
           hitWallCounter ++;
         }

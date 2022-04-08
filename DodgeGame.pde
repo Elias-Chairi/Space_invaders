@@ -37,19 +37,12 @@ class DodgeGame implements gameMode {
       
       updateBullets();
       
-      for (int i = 0; i < invaders.length; i++) {
-        if (invaders[i].dead && invaders[i].currentBullet == null) {
-          invaders = removeEelement(invaders, i); // removes the invader when dead and the bullet is out of play
-        }
-      }
-      
-      
       // invader movement
       if (invaders.length > 0) {
         for (int i = 0; i < invaders.length; i++) {
           //invaders[i].y += 0.5;
           if (invaders[i].x >  width - invaders[i].w || invaders[i].x < 0){
-            invaders[i].speed *= -1;
+            invaders[i].xSpeed *= -1;
           }
         }
 
@@ -94,26 +87,13 @@ class DodgeGame implements gameMode {
   
   void spawnInvaders() {
     if (enemySpwanTimer % 90 == 0) {
-      invaders = (Invader[])append(invaders, new Invader(int(random(width -20)), 50, 20, 20, p1, 0, true)); // xPos, yPos, width, height, ySpeed, randomDirection
-      invaders[invaders.length - 1].moveToY = height;
+      invaders = (Invader[])append(invaders, new Invader(int(random(width -20)), 50, 20, 20, p1, 1, true)); // xPos, yPos, width, height, ySpeed, randomDirection
+      // moveToY is never set so ySpeed dosent matter
     } 
     enemySpwanTimer++;
   }
   
-  
-  
   void updateBullets() {
-    if (p1.currentBullet != null) { // if playerBullet exists, check for hit on invaders
-      for (int i = 0; i < invaders.length; i++) { // if invader exists, check for hit
-        if (rectHitsRect(p1.currentBullet.x, p1.currentBullet.y, p1.currentBullet.w, p1.currentBullet.h, // playerBullet xPos, yPos, width, height
-                         invaders[i].x, int(invaders[i].y), invaders[i].w, invaders[i].h)) { // invader xPos, yPos, width, height
-          p1.currentBullet = null;
-          p1.score += invaders[i].value;
-          invaders[i].dead = true;
-          break; // can only hit one invader at the same time
-        }
-      }
-    }
     for (int i = 0; i < invaders.length; i++) {
       if (invaders[i].currentBullet != null && // if invaderBullet exists, check for hit on player
           rectHitsRect(invaders[i].currentBullet.x, invaders[i].currentBullet.y, invaders[i].currentBullet.w, invaders[i].currentBullet.h, // inavderBullet xPos Ypos width height
@@ -132,18 +112,6 @@ class DodgeGame implements gameMode {
       return true;
     } 
     return false;
-  }
-  
-  Invader[] removeEelement( Invader[] array, int index) {
-    Invader[] newArray = new Invader[array.length -1];
-    int k = 0;
-    for (int i = 0; i < array.length; i++){
-      if (i != index) {
-        newArray[k] = array[i];
-        k++;
-      }
-    }
-    return newArray;
   }
   
   void gameKeyPressed() {

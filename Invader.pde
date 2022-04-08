@@ -2,7 +2,7 @@ class Invader {
   int x, w, h;
   float y, moveToY;
   int counter = 0;
-  int speed = 1;
+  int xSpeed = 1;
   float ySpeed;
   int value = 30;
   Bullet currentBullet;
@@ -18,7 +18,7 @@ class Invader {
     randDir = randomDirection;
     if (randDir) {
       if (int(random(2)) == 0) {
-        speed *= -1;
+        xSpeed *= -1;
       }
     }
     ySpeed = yspeed;
@@ -28,7 +28,7 @@ class Invader {
   }
   
   void update() {
-    x += speed;
+    x += xSpeed;
     
     if (y < moveToY) {
       y += ySpeed;

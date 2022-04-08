@@ -44,7 +44,7 @@ class RainingInvaders implements gameMode {
       if (invaders.length > 0) {
         for (int i = 0; i < invaders.length; i++) {
           if (invaders[i].x >  width - invaders[i].w || invaders[i].x < 0){
-            invaders[i].speed *= -1;
+            invaders[i].xSpeed *= -1;
           }
         }
 
